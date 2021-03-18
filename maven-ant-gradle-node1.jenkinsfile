@@ -1,0 +1,45 @@
+#!groovy
+
+pipeline{
+    agent { node { label "master"}}     
+    
+       
+    stages{
+        stage("mavenBuild"){
+            steps{
+                script{
+                    mvnHome = tool 'M2'
+                    sh "${mvnHome}/bin/mvn  clean package -Dmaven.test.skip=true "
+                }
+            } 
+        }
+        stage("antBuild"){
+            steps{
+                script{
+                    try {
+                         antHome = '/usr/local/apache-ant-1.9.15'
+                         sh "${antHome}/bin/ant  -v "
+                     } catch(e){
+                         println(e)
+                     }
+                }
+            } 
+        }
+        stage("GradleBuild"){
+            steps{
+                script{
+                    antHome =  '/usr/local/gradle-5.3'
+                    sh "${antHome}/bin/gradle  -v "
+                }
+            } 
+        }
+        stage("npmBuild"){
+            steps{
+                script{
+                    npmHome =  tool 'npm'
+                    sh "${npmHome}/bin/npm  -v "
+                }
+            } 
+        }
+    } 
+}      
