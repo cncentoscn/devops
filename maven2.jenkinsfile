@@ -1,0 +1,16 @@
+#!groovy
+pipeline{
+    agent { node { label "master"}}     
+    
+       
+    stages{
+        stage("mavenBuild"){
+            steps{
+                script{
+                    def mvnHome = '/usr/local/apache-maven-3.6.3'
+                    sh "${mvnHome}/bin/mvn  -V "
+                }
+            } 
+        }
+    } 
+}      
